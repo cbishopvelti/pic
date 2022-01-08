@@ -2,6 +2,7 @@
   "name": "pic",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://cbishopvelti.github.io/pic/",
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
