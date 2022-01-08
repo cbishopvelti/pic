@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Grid, TextField, Box } from "@mui/material"
-import { sum, clamp, round } from 'lodash';
+import { sum, clamp, round, set } from 'lodash';
 
 const formatNumber = (number) => {
     if (number === undefined) {
@@ -75,6 +75,14 @@ const Calculator = ({
             }
         )
     }
+    const changeValueDeep = (path) => (event) => {
+        const newValue = parseInt(event.target.value.replace(/,/g, ''));
+        const value = (isNaN(newValue) ? event.target.value : newValue);
+        set(state, path, value);
+        setState(
+            {...state}
+        );
+    }
 
     return (<div>
         <h1>{state.name}</h1>
@@ -133,7 +141,7 @@ const Calculator = ({
                     <TextField value={(formatNumber(state?.emptyMonths))} id="emptyMonths" label="Empty Months" onChange={changeValue("emptyMonths")} />
                     {
                         state.rooms.map((room, index) => {
-                            return <TextField key={`room${index + 1}`} value={(formatNumber(room))} id={`room${index + 1}`} label={`Room ${index + 1}`} onChange={changeValue(`rooms[${index}]`)} />
+                            return <TextField key={`room${index + 1}`} value={(formatNumber(room))} id={`room${index + 1}`} label={`Room ${index + 1}`} onChange={changeValueDeep(`rooms[${index}]`)} />
                         })
                     }
                     <div>
@@ -146,6 +154,7 @@ const Calculator = ({
             </Grid>
             <Grid item xs={3}>
                 <h3>Profit</h3>
+                <h4>Profit per month: {formatNumber((calculateIncomePerYear(state) - calculateExpensePerYear(state)) / 12)}</h4>
                 <h4>Profit per year: {formatNumber(calculateIncomePerYear(state) - calculateExpensePerYear(state))}</h4>
                 <h4>Profit %: {calculateProfitPercent(state)}</h4>
                 <a href={state.link} target="_blank">{state.link}</a>

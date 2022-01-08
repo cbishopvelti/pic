@@ -38,6 +38,21 @@ function App() {
           variant='contained'
           onClick={() => setState({
             ...defaultState,
+            name: "Pinnocks way",
+            priceOfProperty: 365000,
+            rooms: [
+              600,
+              600
+            ],
+            spare: 0,
+            whiteGoods: 0,
+            propertyFees: 0,
+            mortgagePercent: 1.6,
+          })}>Pinnocks way</Button>
+        <Button
+          variant='contained'
+          onClick={() => setState({
+            ...defaultState,
             name: "Bulan Road",
             priceOfProperty: 550000,
             rooms: [
