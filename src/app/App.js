@@ -96,6 +96,20 @@ function App() {
             ],
             link: "https://www.zoopla.co.uk/for-sale/details/60452620/"
           })}>Yeats close</Button>
+                  <Button
+          variant='contained'
+          onClick={() => setState({
+            ...defaultState,
+            name: "77 Langley close",
+            priceOfProperty: 450000,
+            rooms: [
+              600,
+              600,
+              600,
+              600
+            ],
+            link: "https://www.zoopla.co.uk/for-sale/property/headington/"
+          })}>77 Langley close</Button>
       </div>
       <div>
       </div>
