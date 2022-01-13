@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Grid, TextField, Box } from "@mui/material"
 import { sum, clamp, round, set } from 'lodash';
 import { useParams } from 'react-router-dom';
@@ -74,6 +74,10 @@ const Calculator = ({
         ...data[propertyId]
     });
 
+    useEffect(() => {
+        setState(data[propertyId]);
+    }, [propertyId])
+
     const changeValue = (path) => (event) => {        
         const newValue = parseInt(event.target.value.replace(/,/g, ''));
         setState(
@@ -105,7 +109,7 @@ const Calculator = ({
                     <TextField value={(formatNumber(state?.priceOfProperty))} id="priceOfProperty" label="Price of property" onChange={changeValue("priceOfProperty")} />
                     <TextField value={(formatNumber(state?.propertyFees))} id="propertyFees" label="Fees" onChange={changeValue("propertyFees")} />
                     <TextField value={(formatNumber(state?.whiteGoods))} id="whiteGoods" label="White Goods" onChange={changeValue("whiteGoods")} />
-                    <TextField value={(formatNumber(state?.spare))} id="spare" label="Spare" onChange={changeValue("spare")} />
+                    <TextField value={(formatNumber(state?.spare))} id="spare" label="Renovation" onChange={changeValue("spare")} />
                     <div>
                         <h4>Stamp duty: {formatNumber(caluclateStampDuty(state))}</h4>
                     </div>

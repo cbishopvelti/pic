@@ -4,7 +4,8 @@ import './App.css';
 import Calculator from '../calculator/Calculator';
 import { Button, Link } from '@mui/material';
 import {
-  BrowserRouter as Router,
+  // BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
@@ -15,14 +16,14 @@ function App() {
     <Router>
       <div className="App">
         <div className='property-menu'>
-          <Button variant="contained" href="/pic/calculator/pinnocksWay">Pinnocks Way</Button>
-          <Button variant="contained" href="/pic/calculator/langleyCl">77 Langley Close</Button>
+          <Button variant="contained" href="#/calculator/pinnocksWay">Pinnocks Way</Button>
+          <Button variant="contained" href="#/calculator/langleyCl">77 Langley Close</Button>
         </div>
         <div>
         </div>
         <div className="">
           <Routes>
-            <Route path={`/pic/calculator/:propertyId`} element={<Calculator />}>
+            <Route path={`/calculator/:propertyId`} element={<Calculator />}>
             </Route>
           </Routes>
         </div>
