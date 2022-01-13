@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Grid, TextField, Box } from "@mui/material"
 import { sum, clamp, round, set } from 'lodash';
+import { useParams } from 'react-router-dom';
+import data, { defaultData } from '../data/data';
 
 const formatNumber = (number) => {
     if (number === undefined) {
@@ -63,9 +65,15 @@ const calculateProfitPercent = (state) => {
 }
 
 const Calculator = ({
-    state,
-    setState
+
 }) => {
+    const { propertyId } = useParams()
+
+    const [state, setState]  = useState({
+        ...defaultData,
+        ...data[propertyId]
+    });
+
     const changeValue = (path) => (event) => {        
         const newValue = parseInt(event.target.value.replace(/,/g, ''));
         setState(
