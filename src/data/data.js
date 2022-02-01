@@ -49,6 +49,19 @@ const data = {
     ],
     link: "https://www.zoopla.co.uk/for-sale/details/53768724/",
     spare: 50000
+  },
+  cricketRd: {
+    ...defaultData,
+    name: "11 Cricket road",
+    priceOfProperty: 500000,
+    rooms: [
+      600,
+      600,
+      600,
+      550
+    ],
+    link: "https://www.zoopla.co.uk/for-sale/details/60645737/?search_identifier=6d2ef058666e20016a56de9f44f00bd8",
+    spare: 20000
   }
 }
 

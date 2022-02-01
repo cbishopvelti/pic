@@ -18,6 +18,7 @@ function App() {
         <div className='property-menu'>
           <Button variant="contained" href="#/calculator/pinnocksWay">Pinnocks Way</Button>
           <Button variant="contained" href="#/calculator/langleyCl">77 Langley Close</Button>
+          <Button variant="contained" href="#/calculator/cricketRd">11 Cricket Road</Button>
         </div>
         <div>
         </div>
