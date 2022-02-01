@@ -61,7 +61,7 @@ const data = {
       550
     ],
     link: "https://www.zoopla.co.uk/for-sale/details/60645737/?search_identifier=6d2ef058666e20016a56de9f44f00bd8",
-    spare: 20000
+    spare: 50000
   }
 }
 
