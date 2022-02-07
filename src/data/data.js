@@ -86,6 +86,7 @@ const data = {
       500,
     ],
     link: "https://www.zoopla.co.uk/for-sale/details/60664531/",
+    spare: 50000
   }
 }
 
