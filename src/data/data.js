@@ -87,6 +87,19 @@ const data = {
     ],
     link: "https://www.zoopla.co.uk/for-sale/details/60664531/",
     spare: 50000
+  },
+  deneRoad81: {
+    ...defaultData,
+    priceOfProperty: 450000,
+    name: "81 Dene road",
+    rooms: [
+      500,
+      500,
+      500,
+      500
+    ],
+    link: "https://www.zoopla.co.uk/for-sale/details/60664645/",
+    spare: 20000
   }
 }
 
