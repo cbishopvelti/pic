@@ -50,6 +50,19 @@ const data = {
     link: "https://www.zoopla.co.uk/for-sale/details/53768724/",
     spare: 50000
   },
+  deneRoad: {
+    ...defaultData,
+    name: "2 Dene road",
+    priceOfProperty: 425000,
+    rooms: [
+      500,
+      500,
+      500,
+      500
+    ],
+    link: "https://www.zoopla.co.uk/for-sale/details/60588847/",
+    spare: 10000
+  },
   cricketRd: {
     ...defaultData,
     name: "11 Cricket road",
@@ -75,6 +88,31 @@ const data = {
     ],
     link: "https://www.zoopla.co.uk/for-sale/details/62864203/?search_identifier=27391afbce5088b53272b295f23905f7",
     spare: 80000
+  },
+  poplarRoad: {
+    ...defaultData,
+    name: "13 Poplar road",
+    priceOfProperty: 350000,
+    rooms: [
+      550,
+      550,
+      500,
+    ],
+    link: "https://www.zoopla.co.uk/for-sale/details/60664531/",
+    spare: 50000
+  },
+  deneRoad81: {
+    ...defaultData,
+    priceOfProperty: 450000,
+    name: "81 Dene road",
+    rooms: [
+      500,
+      500,
+      500,
+      500
+    ],
+    link: "https://www.zoopla.co.uk/for-sale/details/60664645/",
+    spare: 20000
   }
 }
 
