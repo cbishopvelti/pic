@@ -9,11 +9,11 @@ export const defaultData = {
   insuranceYear: 600,
   internetMonth: 40,
   waterYear: 600,
-  mortgagePercent: 1.8,
+  mortgagePercent: 6,
   boilerServiceYear: 80,
   maintinanceYear: 1000,
 
-  emptyMonths: 2,
+  emptyMonths: 1,
   rooms: [
       600,
       600,
@@ -62,6 +62,19 @@ const data = {
     ],
     link: "https://www.zoopla.co.uk/for-sale/details/60645737/?search_identifier=6d2ef058666e20016a56de9f44f00bd8",
     spare: 50000
+  },
+  cowleyRd: {
+    ...defaultData,
+    name: "455 Cowley Road",
+    priceOfProperty: 450000,
+    rooms: [
+      650,
+      650,
+      650,
+      650
+    ],
+    link: "https://www.zoopla.co.uk/for-sale/details/62864203/?search_identifier=27391afbce5088b53272b295f23905f7",
+    spare: 80000
   }
 }
 
