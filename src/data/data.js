@@ -28,7 +28,8 @@ const data = {
     name: "Pinnocks way",
     priceOfProperty: 365000,
     rooms: [
-      600,
+      680,
+      650,
       600
     ],
     spare: 0,
@@ -125,11 +126,9 @@ const data = {
     whiteGoods: 0,
     boilerServiceYear: 0,
     mortgagePercent: 5.55,
+    emptyMonths: 11,
     rooms: [
-      360,
-      360,
-      360,
-      370
+      17500
     ],
     link: "https://www.rightmove.co.uk/properties/131007605",
     spare: 0
