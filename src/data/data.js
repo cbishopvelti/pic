@@ -6,12 +6,12 @@ export const defaultData = {
   spare: 10000,
 
   councilTaxYear: 2169.23,
-  insuranceYear: 600,
+  insuranceYear: 700,
   internetMonth: 40,
   waterYear: 600,
-  mortgagePercent: 6,
+  mortgagePercent: 5,
   boilerServiceYear: 80,
-  maintinanceYear: 1000,
+  maintinanceYear: 2000,
 
   emptyMonths: 1,
   rooms: [
@@ -113,6 +113,26 @@ const data = {
     ],
     link: "https://www.zoopla.co.uk/for-sale/details/60664645/",
     spare: 20000
+  },
+  bracegirdle18: {
+    ...defaultData,
+    priceOfProperty: 325000,
+    name: "18 Bracegirdle Rd",
+    emptyMonths: 0,
+    councilTaxYear: 0,
+    waterYear: 0,
+    internetMonth: 0,
+    whiteGoods: 0,
+    boilerServiceYear: 0,
+    mortgagePercent: 5.55,
+    rooms: [
+      360,
+      360,
+      360,
+      370
+    ],
+    link: "https://www.rightmove.co.uk/properties/131007605",
+    spare: 0
   }
 }
 

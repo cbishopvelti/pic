@@ -15,12 +15,12 @@ const caluclateStampDuty = (state) => {
     const priceOfProperty = state.priceOfProperty || 0;
 
     const stampDutys = [
-        clamp(priceOfProperty - 125000, 0, 125000) * 0.02,
+        clamp(priceOfProperty - 125000, 0, 125000) * 0.00,
         clamp(priceOfProperty - 250000, 0, 670000) * 0.05,
         clamp(priceOfProperty - 925000, 0, 575000) * 0.10,
         clamp(priceOfProperty - 1500000, 0, Number.MIN_SAFE_INTEGER) * 0.20,
         priceOfProperty * 0.03
-    ];
+    ]
 
     return sum(stampDutys);
 }
@@ -35,7 +35,7 @@ const capitalNeeded = (state) => {
     ]);
 }
 
-const calculateMortagePerMonth = (state) => {
+const calculateMortgagePerMonth = (state) => {
     const priceOfProprty = state.priceOfProperty || 0;
     return round((priceOfProprty * 0.75 * (state.mortgagePercent / 100)) / 12, 2);
 }
@@ -45,7 +45,7 @@ const calculateExpensePerMonth = (state) => {
         state.insuranceYear / 12,
         state.internetMonth,
         state.waterYear / 12,
-        calculateMortagePerMonth(state),
+        calculateMortgagePerMonth(state),
         state.boilerServiceYear / 12,
         state.maintinanceYear / 12
     ]), 2);
@@ -78,8 +78,10 @@ const Calculator = ({
         setState(data[propertyId]);
     }, [propertyId])
 
-    const changeValue = (path) => (event) => {        
-        const newValue = parseInt(event.target.value.replace(/,/g, ''));
+    const changeValue = (path, isFloat = false) => (event) => {        
+
+        const newValue = isFloat ? parseFloat(event.target.value.replace(/,/g, '')) : parseInt(event.target.value.replace(/,/g, ''));
+        console.log("001", newValue)
         setState(
             {
                 ...state,
@@ -129,11 +131,11 @@ const Calculator = ({
                     <TextField value={(formatNumber(state?.insuranceYear))} id="insuranceYear" label="Inusance per year" onChange={changeValue("insuranceYear")} />
                     <TextField value={(formatNumber(state?.internetMonth))} id="internetMonth" label="Internet per month" onChange={changeValue("internetMonth")} />
                     <TextField value={(formatNumber(state?.waterYear))} id="waterYear" label="Water per year" onChange={changeValue("waterYear")} />
-                    <TextField value={(formatNumber(state?.mortgagePercent))} id="mortgagePercent" label="Mortgage %" onChange={changeValue("mortgagePercent")} />
+                    <TextField value={(formatNumber(state?.mortgagePercent))} id="mortgagePercent" label="Mortgage %" onChange={changeValue("mortgagePercent", true)} />
                     <TextField value={(formatNumber(state?.boilerServiceYear))} id="boilerServiceYear" label="Boiler service" onChange={changeValue("boilerServiceYear")} />
                     <TextField value={(formatNumber(state?.maintinanceYear))} id="maintinanceYear" label="Maintinance per year" onChange={changeValue("maintinanceYear")} />
                     <div>
-                        <h4>Mortgage per month: {calculateMortagePerMonth(state)}</h4>
+                        <h4>Mortgage per month: {calculateMortgagePerMonth(state)}</h4>
                     </div>
                     <div>
                         <h4>Expense per month: {calculateExpensePerMonth(state)}</h4>
