@@ -25,9 +25,11 @@ const caluclateStampDuty = (state) => {
     return sum(stampDutys);
 }
 
+const ltv = 0.75;
+
 const capitalNeeded = (state) => {
     return sum([
-        state.priceOfProperty * 0.25,
+        state.priceOfProperty * (1 - ltv),
         caluclateStampDuty(state),
         state.whiteGoods,
         state.spare,
@@ -37,7 +39,7 @@ const capitalNeeded = (state) => {
 
 const calculateMortgagePerMonth = (state) => {
     const priceOfProprty = state.priceOfProperty || 0;
-    return round((priceOfProprty * 0.75 * (state.mortgagePercent / 100)) / 12, 2);
+    return round((priceOfProprty * ltv * (state.mortgagePercent / 100)) / 12, 2);
 }
 const calculateExpensePerMonth = (state) => {
     return round(sum([

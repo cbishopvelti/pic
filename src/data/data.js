@@ -125,7 +125,7 @@ const data = {
     internetMonth: 0,
     whiteGoods: 0,
     boilerServiceYear: 0,
-    mortgagePercent: 5.55,
+    mortgagePercent: 6,
     emptyMonths: 11,
     rooms: [
       17500
