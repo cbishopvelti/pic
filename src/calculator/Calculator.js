@@ -25,11 +25,11 @@ const caluclateStampDuty = (state) => {
     return sum(stampDutys);
 }
 
-const ltv = 0.75;
+// const ltv = 0.4;
 
 const capitalNeeded = (state) => {
     return sum([
-        state.priceOfProperty * (1 - ltv),
+        state.priceOfProperty * (1 - (state.mortgageLtv/100)),
         caluclateStampDuty(state),
         state.whiteGoods,
         state.spare,
@@ -39,7 +39,7 @@ const capitalNeeded = (state) => {
 
 const calculateMortgagePerMonth = (state) => {
     const priceOfProprty = state.priceOfProperty || 0;
-    return round((priceOfProprty * ltv * (state.mortgagePercent / 100)) / 12, 2);
+    return round((priceOfProprty * (state.mortgageLtv/100) * (state.mortgagePercent / 100)) / 12, 2);
 }
 const calculateExpensePerMonth = (state) => {
     return round(sum([
@@ -134,6 +134,7 @@ const Calculator = ({
                     <TextField value={(formatNumber(state?.internetMonth))} id="internetMonth" label="Internet per month" onChange={changeValue("internetMonth")} />
                     <TextField value={(formatNumber(state?.waterYear))} id="waterYear" label="Water per year" onChange={changeValue("waterYear")} />
                     <TextField value={(formatNumber(state?.mortgagePercent))} id="mortgagePercent" label="Mortgage %" onChange={changeValue("mortgagePercent", true)} />
+                    <TextField value={(formatNumber(state?.mortgageLtv))} id="mortgageLtv" label="Mortgage Ltv %" onChange={changeValue("mortgageLtv", true)} />
                     <TextField value={(formatNumber(state?.boilerServiceYear))} id="boilerServiceYear" label="Boiler service" onChange={changeValue("boilerServiceYear")} />
                     <TextField value={(formatNumber(state?.maintinanceYear))} id="maintinanceYear" label="Maintinance per year" onChange={changeValue("maintinanceYear")} />
                     <div>

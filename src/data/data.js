@@ -10,6 +10,7 @@ export const defaultData = {
   internetMonth: 40,
   waterYear: 600,
   mortgagePercent: 5,
+  mortgageLtv: 50,
   boilerServiceYear: 80,
   maintinanceYear: 2000,
 
@@ -125,10 +126,32 @@ const data = {
     internetMonth: 0,
     whiteGoods: 0,
     boilerServiceYear: 0,
-    mortgagePercent: 6,
+    mortgagePercent: 6.19,
     emptyMonths: 11,
     rooms: [
-      17500
+      16100
+    ],
+    link: "https://www.rightmove.co.uk/properties/131007605",
+    spare: 0
+  },
+  bracegirdle18b: {
+    ...defaultData,
+    priceOfProperty: 325000,
+    name: "18 Bracegirdle Rd",
+    emptyMonths: 0,
+    councilTaxYear: 0,
+    waterYear: 0,
+    internetMonth: 0,
+    whiteGoods: 0,
+    boilerServiceYear: 0,
+    mortgagePercent: 6.19,
+    mortgageLtv: 0.5,
+    emptyMonths: 1,
+    rooms: [
+      500,
+      500,
+      500,
+      500
     ],
     link: "https://www.rightmove.co.uk/properties/131007605",
     spare: 0
