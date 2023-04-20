@@ -129,7 +129,7 @@ const data = {
     mortgagePercent: 6.19,
     emptyMonths: 11,
     rooms: [
-      16100
+      17500
     ],
     link: "https://www.rightmove.co.uk/properties/131007605",
     spare: 0
