@@ -126,8 +126,9 @@ const data = {
     internetMonth: 0,
     whiteGoods: 0,
     boilerServiceYear: 0,
-    mortgagePercent: 6.19,
+    mortgagePercent: 6,
     emptyMonths: 11,
+    mortgageLtv: 0.56,
     rooms: [
       17500
     ],
@@ -155,6 +156,31 @@ const data = {
     ],
     link: "https://www.rightmove.co.uk/properties/131007605",
     spare: 0
+  },
+  londonRoad: {
+    ...defaultData,
+    priceOfProperty: 500000,
+    name: "63 London Road",
+    emptyMonths: 1,
+    councilTaxYear: 2000,
+    waterYear: 1000,
+    internetMonth: 50,
+    whiteGoods: 500,
+    boilerServiceYear: 100,
+    mortgagePercent: 5.25,
+    mortgageLtv: 75,
+    emptyMonths: 1,
+    rooms: [
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700
+    ],
+    link: "https://www.rightmove.co.uk/properties/151775960?utm_campaign=property-details&utm_content=buying&utm_medium=sharing&utm_source=whatsapp#/?channel=RES_BUY",
+    spare: 40000
   }
 }
 
