@@ -181,7 +181,27 @@ const data = {
     ],
     link: "https://www.rightmove.co.uk/properties/151775960?utm_campaign=property-details&utm_content=buying&utm_medium=sharing&utm_source=whatsapp#/?channel=RES_BUY",
     spare: 40000
-  }
+  },
+  oldBridgeRoad: {
+    ...defaultData,
+    priceOfProperty: 365000,
+    name: "Old Bridge Road",
+    insuranceYear: 500,
+    emptyMonths: 1,
+    councilTaxYear: 0,
+    waterYear: 0,
+    internetMonth: 0,
+    whiteGoods: 500,
+    boilerServiceYear: 0,
+    mortgagePercent: 4.14,
+    mortgageLtv: 75,
+    propertyFees: 0,
+    rooms: [
+      1600,
+    ],
+    link: "https://www.zoopla.co.uk/for-sale/details/70422846/",
+    spare: 0
+  },
 }
 
 export default data;

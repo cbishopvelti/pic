@@ -19,7 +19,7 @@ const caluclateStampDuty = (state) => {
         clamp(priceOfProperty - 250000, 0, 670000) * 0.05,
         clamp(priceOfProperty - 925000, 0, 575000) * 0.10,
         clamp(priceOfProperty - 1500000, 0, Number.MIN_SAFE_INTEGER) * 0.20,
-        priceOfProperty * 0.03
+        priceOfProperty * 0.05
     ]
 
     return sum(stampDutys);
@@ -80,7 +80,7 @@ const Calculator = ({
         setState(data[propertyId]);
     }, [propertyId])
 
-    const changeValue = (path, isFloat = false) => (event) => {        
+    const changeValue = (path, isFloat = false) => (event) => {
 
         const newValue = isFloat ? parseFloat(event.target.value.replace(/,/g, '')) : parseInt(event.target.value.replace(/,/g, ''));
         console.log("001", newValue)
@@ -104,7 +104,7 @@ const Calculator = ({
         <h1>{state.name}</h1>
         <Grid container spacing={2}>
             <Grid item xs={3}>
-                <Box 
+                <Box
                 sx={{
                     '& .MuiTextField-root': { m: 1, width: '25ch' },
                 }}
