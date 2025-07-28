@@ -196,6 +196,7 @@ const data = {
     mortgagePercent: 4.14,
     mortgageLtv: 75,
     propertyFees: 0,
+    maintinanceYear: 1000,
     rooms: [
       1600,
     ],
