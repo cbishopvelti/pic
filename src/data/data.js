@@ -203,6 +203,27 @@ const data = {
     link: "https://www.zoopla.co.uk/for-sale/details/70422846/",
     spare: 0
   },
+  hamiltonGardens: {
+    ...defaultData,
+    priceOfProperty: 325000,
+    name: "Hamilton Gardens",
+    insuranceYear: 707.92,
+    emptyMonths: 0,
+    councilTaxYear: 0,
+    waterYear: 0,
+    internetMonth: 0,
+    whiteGoods: 0,
+    boilerServiceYear: 0,
+    mortgagePercent: 5.24,
+    mortgageLtv: 75,
+    propertyFees: 170,
+    maintinanceYear: 600,
+    rooms: [
+      1600,
+    ],
+    link: "https://www.zoopla.co.uk/for-sale/details/73668650/",
+    spare: 0
+  },
 }
 
 export default data;

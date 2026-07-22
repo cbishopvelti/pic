@@ -26,6 +26,7 @@ function App() {
           <Button variant="contained" href="#/calculator/bracegirdle18">18 Bracegirdle</Button>
           <Button variant="contained" href="#/calculator/londonRoad">London Road</Button>
           <Button variant="contained" href="#/calculator/oldBridgeRoad">Old Bridge Road</Button>
+          <Button variant="contained" href="#/calculator/hamiltonGardens">Hamilton Gardens</Button>
         </div>
         <div>
         </div>
