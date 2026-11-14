@@ -10,6 +10,7 @@ import {
   HashRouter as Router,
   Routes,
   Route,
+  useMatch,
 } from "react-router-dom";
 
 // The home page: every property as a card. Picking one opens its calculator.
@@ -29,16 +30,24 @@ const PropertiesPage = () => {
   );
 };
 
-const CalculatorPage = () => (
-  <>
-    <Box sx={{ textAlign: 'left', px: 2, pt: 2 }}>
-      <Button href="#/" startIcon={<span aria-hidden="true">←</span>}>
-        All properties
-      </Button>
-    </Box>
-    <Calculator />
-  </>
-);
+// Header menu. The current page's item is underlined.
+const MenuItem = ({ to, children }) => {
+  const active = !!useMatch(to);
+  return (
+    <Button
+      href={`#${to}`}
+      aria-current={active ? 'page' : undefined}
+      sx={{
+        fontWeight: 600,
+        borderRadius: 0,
+        borderBottom: 2,
+        borderColor: active ? 'primary.main' : 'transparent',
+      }}
+    >
+      {children}
+    </Button>
+  );
+};
 
 function App() {
 
@@ -50,11 +59,14 @@ function App() {
             <img src={logo} className="App-logo" alt="pic logo" />
             <span className="App-title">Property Investment Calculator</span>
           </a>
+          <nav className="App-nav" aria-label="Main">
+            <MenuItem to="/">Properties</MenuItem>
+          </nav>
         </header>
         <div className="">
           <Routes>
             <Route path="/" element={<PropertiesPage />} />
-            <Route path={`/calculator/:propertyId`} element={<CalculatorPage />} />
+            <Route path={`/calculator/:propertyId`} element={<Calculator />} />
           </Routes>
         </div>
       </div>
