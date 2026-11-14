@@ -2,13 +2,28 @@ import logo from './logo.svg';
 import { useState } from 'react';
 import './App.css';
 import Calculator from '../calculator/Calculator';
-import { Button, Link } from '@mui/material';
+import PropertyPicker from '../properties/PropertyPicker';
+import useProperties from '../properties/useProperties';
 import {
   // BrowserRouter as Router,
   HashRouter as Router,
   Routes,
   Route,
+  useMatch,
 } from "react-router-dom";
+
+const PropertyMenu = () => {
+  const { properties, loading } = useProperties();
+  const match = useMatch('/calculator/:propertyId');
+  return (
+    <PropertyPicker
+      properties={properties}
+      loading={loading}
+      selectedId={match?.params.propertyId}
+      hrefFor={(id) => `#/calculator/${id}`}
+    />
+  );
+};
 
 function App() {
 
@@ -16,17 +31,7 @@ function App() {
     <Router>
       <div className="App">
         <div className='property-menu'>
-          <Button variant="contained" href="#/calculator/pinnocksWay">Pinnocks Way</Button>
-          <Button variant="contained" href="#/calculator/langleyCl">77 Langley Close</Button>
-          <Button variant="contained" href="#/calculator/deneRoad">2 Dene road</Button>
-          <Button variant="contained" href="#/calculator/cricketRd">11 Cricket Road</Button>
-          <Button variant="contained" href="#/calculator/poplarRoad">13 poplar road</Button>
-          <Button variant="contained" href="#/calculator/deneRoad81">81 Dene road</Button>
-          <Button variant="contained" href="#/calculator/cowleyRd">455 Cowley Road</Button>
-          <Button variant="contained" href="#/calculator/bracegirdle18">18 Bracegirdle</Button>
-          <Button variant="contained" href="#/calculator/londonRoad">London Road</Button>
-          <Button variant="contained" href="#/calculator/oldBridgeRoad">Old Bridge Road</Button>
-          <Button variant="contained" href="#/calculator/hamiltonGardens">Hamilton Gardens</Button>
+          <PropertyMenu />
         </div>
         <div>
         </div>
