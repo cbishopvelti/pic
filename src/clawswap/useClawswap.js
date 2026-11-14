@@ -44,7 +44,6 @@ export function useClawswap() {
   return {
     state,
     error,
-    switchTo: (branch) => post("/switch", { branch }),
     pull: () => post("/pull"),
   };
 }

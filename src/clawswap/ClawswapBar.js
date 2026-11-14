@@ -3,10 +3,10 @@ import { CLAWSWAP_URL, useClawswap } from "./useClawswap";
 import "./ClawswapBar.css";
 
 // clawswap's controls in a bar fixed to the bottom of the page, shown only by the dev server (see
-// index.js): the branch picker and Pull button on the API, and a Branches button that opens clawswap's
-// own page in a panel above the bar. Based on clawswap's examples/react-embed.
+// index.js): the branch you're on and a Pull button on the API, and a Branches button that opens
+// clawswap's own page, to switch branch, in a panel above the bar. Based on clawswap's examples/react-embed.
 export default function ClawswapBar() {
-  const { state, error, switchTo, pull } = useClawswap();
+  const { state, error, pull } = useClawswap();
   const [message, setMessage] = useState(null);
   const [open, setOpen] = useState(false);
   const [frameKey, setFrameKey] = useState(0);
@@ -55,19 +55,7 @@ export default function ClawswapBar() {
         </span>
       ) : (
         <>
-          <select value={current} disabled={phase === "running"} onChange={(e) => act(switchTo(e.target.value))}>
-            {!state.branches.some((b) => b.branch === current) && (
-              <option value={current}>{current || "detached HEAD"}</option>
-            )}
-            {state.branches.map((b) => (
-              <option key={b.branch} value={b.branch}>
-                {b.pr ? `#${b.pr.number} ${b.pr.title}` : b.short}
-              </option>
-            ))}
-          </select>
-          <button className={behind ? "cs-behind" : ""} disabled={phase === "running"} onClick={() => act(pull())}>
-            Pull{behind ? ` (${behind})` : ""}
-          </button>
+          <span>{current || "detached HEAD"}</span>
           {phase === "running" && <span className="cs-status">→ {sw.target}: {sw.step || "starting"}</span>}
           {phase === "failed" && <span className="cs-status">{sw.error}</span>}
           {state.dirty && <span className="cs-muted">uncommitted changes</span>}
@@ -75,19 +63,26 @@ export default function ClawswapBar() {
         </>
       )}
 
-      <div className="cs-menu" ref={menu}>
-        <button className={open ? "cs-on" : ""} aria-expanded={open} onClick={() => setOpen(!open)}>
-          ⎇ Branches ▴
-        </button>
-        {/* Loaded with the page and only hidden while closed, so it keeps following a switch. */}
-        <div className="cs-panel" hidden={!open}>
-          <div className="cs-panel-bar">
-            <span>clawswap</span>
-            <button title="Reload" onClick={() => setFrameKey((k) => k + 1)}>↻</button>
-            <a href={CLAWSWAP_URL} target="_blank" rel="noreferrer" title="Open the full page">↗</a>
-            <button title="Close" onClick={() => setOpen(false)}>✕</button>
+      <div className="cs-actions">
+        {state && (
+          <button className={behind ? "cs-behind" : ""} disabled={phase === "running"} onClick={() => act(pull())}>
+            Pull{behind ? ` (${behind})` : ""}
+          </button>
+        )}
+        <div className="cs-menu" ref={menu}>
+          <button className={open ? "cs-on" : ""} aria-expanded={open} onClick={() => setOpen(!open)}>
+            ⎇ Branches ▴
+          </button>
+          {/* Loaded with the page and only hidden while closed, so it keeps following a switch. */}
+          <div className="cs-panel" hidden={!open}>
+            <div className="cs-panel-bar">
+              <span>clawswap</span>
+              <button title="Reload" onClick={() => setFrameKey((k) => k + 1)}>↻</button>
+              <a href={CLAWSWAP_URL} target="_blank" rel="noreferrer" title="Open the full page">↗</a>
+              <button title="Close" onClick={() => setOpen(false)}>✕</button>
+            </div>
+            <iframe key={frameKey} src={CLAWSWAP_URL} title="clawswap" />
           </div>
-          <iframe key={frameKey} src={CLAWSWAP_URL} title="clawswap" />
         </div>
       </div>
     </div>

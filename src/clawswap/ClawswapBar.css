@@ -11,11 +11,9 @@
   .cs-bar { --cs-bg: #1b1f26; --cs-fg: #eef1f5; --cs-muted: #a3abb8; --cs-line: #333945;
     --cs-accent: #a08bff; --cs-running: #e3b341; --cs-failed: #e0503f; --cs-behind: #58a6ff; }
 }
-.cs-bar button, .cs-bar select { font: inherit; color: inherit; background: var(--cs-bg);
+.cs-bar button { font: inherit; color: inherit; background: var(--cs-bg);
   border: 1px solid var(--cs-line); border-radius: 6px; padding: 3px 10px; cursor: pointer; }
-.cs-bar option { background: var(--cs-bg); color: var(--cs-fg); }
-.cs-bar button:disabled, .cs-bar select:disabled { opacity: 0.6; cursor: default; }
-.cs-bar select { max-width: 320px; }
+.cs-bar button:disabled { opacity: 0.6; cursor: default; }
 .cs-name { color: var(--cs-accent); }
 .cs-muted, .cs-status { color: var(--cs-muted); }
 .cs-off { color: var(--cs-failed); }
@@ -23,7 +21,8 @@
 .cs-bar.failed .cs-status { color: var(--cs-failed); }
 .cs-bar button.cs-behind { border-color: var(--cs-behind); color: var(--cs-behind); }
 
-.cs-menu { position: relative; margin-left: auto; }
+.cs-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.cs-menu { position: relative; }
 .cs-menu > button.cs-on { border-color: var(--cs-accent); color: var(--cs-accent); }
 .cs-panel { position: absolute; right: 0; bottom: calc(100% + 10px); width: 340px; height: min(440px, 70vh);
   display: flex; flex-direction: column; background: var(--cs-bg); border: 1px solid var(--cs-line);
