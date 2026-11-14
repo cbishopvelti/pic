@@ -1,49 +1,84 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-// This project's page and API on the clawswap daemon: /p/<id>, the id being the session's name (the repo
-// folder's name, "pic", as clawswap.exs sets none). Override with REACT_APP_CLAWSWAP_URL in .env.local.
+// This project's API on the clawswap daemon: /p/<id>, the id being the session's name (the repo folder's
+// name, "pic", as clawswap.exs sets none). Override with REACT_APP_CLAWSWAP_URL in .env.local.
 export const CLAWSWAP_URL = process.env.REACT_APP_CLAWSWAP_URL || "http://localhost:27390/p/pic";
 
-// Follows GET /state: every 2 s while a switch runs, every 10 s otherwise. A switch restarts the dev
-// server, so failed fetches are expected for a moment and only show as "unreachable".
-export function useClawswap() {
-  const [state, setState] = useState(null);
-  const [error, setError] = useState(null);
+const POLL_OPEN_MS = 1000;
+const POLL_MS = 5000;
+// While clawswap isn't running, look less and less often, so the console isn't full of refused connections.
+const POLL_DOWN_MAX_MS = 60000;
 
-  const load = useCallback(async () => {
+// Follows GET /state the way bmx's Branches menu does: every second while the list is open or a switch
+// runs, every 5 s otherwise, backing off to a minute while clawswap is down, and again on window focus.
+export function useClawswap(open) {
+  const [state, setState] = useState(null);
+  const [down, setDown] = useState(false);
+  const live = useRef({ open, state: null, down: false, delay: POLL_MS, timer: null, disposed: false });
+  live.current.open = open;
+
+  const poll = useCallback(async () => {
+    const l = live.current;
+    clearTimeout(l.timer);
     try {
       const res = await fetch(`${CLAWSWAP_URL}/state`);
-      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-      setState(await res.json());
-      setError(null);
-    } catch (e) {
-      setError(e.message || String(e));
+      // A 404 is a clawswap daemon that runs other projects but not pic: off, as far as this goes.
+      if (!res.ok) throw new Error(`clawswap answered ${res.status}`);
+      l.state = await res.json();
+      l.down = false;
+      l.delay = POLL_MS;
+      setState(l.state);
+      setDown(false);
+    } catch {
+      l.down = true;
+      l.delay = Math.min(l.delay * 2, POLL_DOWN_MAX_MS);
+      setDown(true);
     }
+    if (l.disposed) return;
+    const running = l.state?.switch?.phase === "running";
+    l.timer = setTimeout(poll, l.down ? l.delay : l.open || running ? POLL_OPEN_MS : POLL_MS);
   }, []);
-
-  const running = state?.switch?.phase === "running";
 
   useEffect(() => {
-    load();
-    const id = setInterval(load, running ? 2000 : 10000);
-    return () => clearInterval(id);
-  }, [load, running]);
+    const l = live.current;
+    l.disposed = false;
+    const onFocus = () => {
+      l.delay = POLL_MS;
+      poll();
+    };
+    poll();
+    window.addEventListener("focus", onFocus);
+    return () => {
+      l.disposed = true;
+      clearTimeout(l.timer);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, [poll]);
 
-  const post = useCallback(async (path, body) => {
-    const res = await fetch(`${CLAWSWAP_URL}${path}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body || {}),
-    });
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(json.error || `${res.status} ${res.statusText}`);
-    if (json.branches) setState(json);
-    return json;
-  }, []);
+  // Returns the error clawswap gave, or null; the new state is applied either way.
+  const post = useCallback(
+    async (path, body) => {
+      let error = null;
+      try {
+        const res = await fetch(`${CLAWSWAP_URL}${path}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body || {}),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) error = json.error || `clawswap answered ${res.status}`;
+        else {
+          live.current.state = json;
+          setState(json);
+        }
+      } catch {
+        error = "clawswap isn't running";
+      }
+      poll();
+      return { error, state: live.current.state };
+    },
+    [poll]
+  );
 
-  return {
-    state,
-    error,
-    pull: () => post("/pull"),
-  };
+  return { state, down, poll, post };
 }
