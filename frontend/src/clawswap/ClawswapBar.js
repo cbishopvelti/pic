@@ -25,6 +25,8 @@ const savedSize = () => {
 export default function ClawswapBar() {
   const { state, error, pull } = useClawswap();
   const [message, setMessage] = useState(null);
+  // A Pull click until clawswap answers it: the answer waits for a fetch from GitHub, which takes a moment.
+  const [asking, setAsking] = useState(false);
   const [open, setOpen] = useState(false);
   const [frameKey, setFrameKey] = useState(0);
   const menu = useRef(null);
@@ -90,6 +92,13 @@ export default function ClawswapBar() {
     return () => window.removeEventListener("message", onMessage);
   }, []);
 
+  // A Pull's answer ("Already up to date", or why it was refused) goes after a while.
+  useEffect(() => {
+    if (!message) return;
+    const id = setTimeout(() => setMessage(null), 8000);
+    return () => clearTimeout(id);
+  }, [message]);
+
   // A click outside the panel or Escape closes it.
   useEffect(() => {
     if (!open) return;
@@ -103,11 +112,23 @@ export default function ClawswapBar() {
     };
   }, [open]);
 
-  const act = (p) => p.then(() => setMessage(null), (e) => setMessage(e.message));
   const current = state?.current?.branch || "";
   const sw = state?.switch;
   const phase = sw?.phase;
   const behind = state?.upstream?.behind;
+  const pulling = asking || (phase === "running" && sw.pull);
+
+  // A pull with nothing new is done at once and reloads nothing, so say so; a refusal says why.
+  const onPull = () => {
+    setAsking(true);
+    setMessage(null);
+    pull()
+      .then(
+        (json) => setMessage(json.switch?.phase === "done" && !json.switch.doneAt ? (json.switch.notes || []).join(" ") || null : null),
+        (e) => setMessage(e.message)
+      )
+      .finally(() => setAsking(false));
+  };
 
   return (
     <div className={`cs-bar ${phase || ""}`}>
@@ -129,8 +150,9 @@ export default function ClawswapBar() {
 
       <div className="cs-actions">
         {state && (
-          <button className={behind ? "cs-behind" : ""} disabled={phase === "running"} onClick={() => act(pull())}>
-            Pull{behind ? ` (${behind})` : ""}
+          <button className={behind && !pulling ? "cs-behind" : ""} disabled={pulling || phase === "running"} onClick={onPull} aria-busy={pulling}>
+            {pulling && <span className="cs-spinner" aria-hidden="true" />}
+            {pulling ? "Pulling…" : `Pull${behind ? ` (${behind})` : ""}`}
           </button>
         )}
         <div className="cs-menu" ref={menu}>

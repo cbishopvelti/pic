@@ -2,13 +2,52 @@ import logo from './logo.svg';
 import { useState } from 'react';
 import './App.css';
 import Calculator from '../calculator/Calculator';
-import { Button, Link } from '@mui/material';
+import PropertyPicker from '../properties/PropertyPicker';
+import useProperties from '../properties/useProperties';
+import { Box, Button, Typography } from '@mui/material';
 import {
   // BrowserRouter as Router,
   HashRouter as Router,
   Routes,
   Route,
+  useMatch,
 } from "react-router-dom";
+
+// The home page: every property as a card. Picking one opens its calculator.
+const PropertiesPage = () => {
+  const { properties, loading } = useProperties();
+  return (
+    <Box sx={{ maxWidth: 1200, mx: 'auto', textAlign: 'left' }}>
+      <Typography variant="h5" component="h1" fontWeight={700} sx={{ px: 2, pt: 3 }}>
+        Properties
+      </Typography>
+      <PropertyPicker
+        properties={properties}
+        loading={loading}
+        hrefFor={(id) => `#/calculator/${id}`}
+      />
+    </Box>
+  );
+};
+
+// Header menu. The current page's item is underlined.
+const MenuItem = ({ to, children }) => {
+  const active = !!useMatch(to);
+  return (
+    <Button
+      href={`#${to}`}
+      aria-current={active ? 'page' : undefined}
+      sx={{
+        fontWeight: 600,
+        borderRadius: 0,
+        borderBottom: 2,
+        borderColor: active ? 'primary.main' : 'transparent',
+      }}
+    >
+      {children}
+    </Button>
+  );
+};
 
 function App() {
 
@@ -20,26 +59,14 @@ function App() {
             <img src={logo} className="App-logo" alt="pic logo" />
             <span className="App-title">Property Investment Calculator</span>
           </a>
+          <nav className="App-nav" aria-label="Main">
+            <MenuItem to="/">Properties</MenuItem>
+          </nav>
         </header>
-        <div className='property-menu'>
-          <Button variant="contained" href="#/calculator/pinnocksWay">Pinnocks Way</Button>
-          <Button variant="contained" href="#/calculator/langleyCl">77 Langley Close</Button>
-          <Button variant="contained" href="#/calculator/deneRoad">2 Dene road</Button>
-          <Button variant="contained" href="#/calculator/cricketRd">11 Cricket Road</Button>
-          <Button variant="contained" href="#/calculator/poplarRoad">13 poplar road</Button>
-          <Button variant="contained" href="#/calculator/deneRoad81">81 Dene road</Button>
-          <Button variant="contained" href="#/calculator/cowleyRd">455 Cowley Road</Button>
-          <Button variant="contained" href="#/calculator/bracegirdle18">18 Bracegirdle</Button>
-          <Button variant="contained" href="#/calculator/londonRoad">London Road</Button>
-          <Button variant="contained" href="#/calculator/oldBridgeRoad">Old Bridge Road</Button>
-          <Button variant="contained" href="#/calculator/hamiltonGardens">Hamilton Gardens</Button>
-        </div>
-        <div>
-        </div>
         <div className="">
           <Routes>
-            <Route path={`/calculator/:propertyId`} element={<Calculator />}>
-            </Route>
+            <Route path="/" element={<PropertiesPage />} />
+            <Route path={`/calculator/:propertyId`} element={<Calculator />} />
           </Routes>
         </div>
       </div>
