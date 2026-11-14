@@ -45,6 +45,12 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <header className="App-header">
+          <a href="#/" className="App-brand">
+            <img src={logo} className="App-logo" alt="pic logo" />
+            <span className="App-title">Property Investment Calculator</span>
+          </a>
+        </header>
         <div className="">
           <Routes>
             <Route path="/" element={<PropertiesPage />} />

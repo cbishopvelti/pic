@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Grid, TextField, Box } from "@mui/material"
-import { sum, set } from 'lodash';
+import { Grid, Box } from "@mui/material"
+import { sum } from 'lodash';
 import { useParams } from 'react-router-dom';
 import data, { defaultData } from '../data/data';
+import NumberField, { formatNumber } from './NumberField';
 import {
     caluclateStampDuty,
     capitalNeeded,
@@ -12,13 +13,6 @@ import {
     calculateIncomePerYear,
     calculateProfitPercent,
 } from './calc';
-
-const formatNumber = (number) => {
-    if (number === undefined) {
-        return "";
-    }
-    return number.toLocaleString();
-}
 
 const Calculator = ({
 
@@ -31,27 +25,21 @@ const Calculator = ({
     });
 
     useEffect(() => {
-        setState(data[propertyId]);
+        setState({
+            ...defaultData,
+            ...data[propertyId]
+        });
     }, [propertyId])
 
-    const changeValue = (path, isFloat = false) => (event) => {
-
-        const newValue = isFloat ? parseFloat(event.target.value.replace(/,/g, '')) : parseInt(event.target.value.replace(/,/g, ''));
-        console.log("001", newValue)
-        setState(
-            {
-                ...state,
-                [path]: isNaN(newValue) ? event.target.value : newValue
-            }
-        )
+    const changeValue = (path) => (value) => {
+        setState((prev) => ({ ...prev, [path]: value }));
     }
-    const changeValueDeep = (path) => (event) => {
-        const newValue = parseInt(event.target.value.replace(/,/g, ''));
-        const value = (isNaN(newValue) ? event.target.value : newValue);
-        set(state, path, value);
-        setState(
-            {...state}
-        );
+    const changeRoom = (index) => (value) => {
+        setState((prev) => {
+            const rooms = [...prev.rooms];
+            rooms[index] = value;
+            return { ...prev, rooms };
+        });
     }
 
     return (<div>
@@ -64,10 +52,10 @@ const Calculator = ({
                 }}
                 >
                     <h3>Capital</h3>
-                    <TextField value={(formatNumber(state?.priceOfProperty))} id="priceOfProperty" label="Price of property" onChange={changeValue("priceOfProperty")} />
-                    <TextField value={(formatNumber(state?.propertyFees))} id="propertyFees" label="Fees" onChange={changeValue("propertyFees")} />
-                    <TextField value={(formatNumber(state?.whiteGoods))} id="whiteGoods" label="White Goods" onChange={changeValue("whiteGoods")} />
-                    <TextField value={(formatNumber(state?.spare))} id="spare" label="Renovation" onChange={changeValue("spare")} />
+                    <NumberField value={state?.priceOfProperty} id="priceOfProperty" label="Price of property" onChange={changeValue("priceOfProperty")} />
+                    <NumberField value={state?.propertyFees} id="propertyFees" label="Fees" onChange={changeValue("propertyFees")} />
+                    <NumberField value={state?.whiteGoods} id="whiteGoods" label="White Goods" onChange={changeValue("whiteGoods")} />
+                    <NumberField value={state?.spare} id="spare" label="Renovation" onChange={changeValue("spare")} />
                     <div>
                         <h4>Stamp duty: {formatNumber(caluclateStampDuty(state))}</h4>
                     </div>
@@ -83,14 +71,14 @@ const Calculator = ({
                     }}
                 >
                     <h3>Expeses</h3>
-                    <TextField value={(formatNumber(state?.councilTaxYear))} id="councilTaxYear" label="Council tax per year" onChange={changeValue("councilTaxYear")} />
-                    <TextField value={(formatNumber(state?.insuranceYear))} id="insuranceYear" label="Inusance per year" onChange={changeValue("insuranceYear")} />
-                    <TextField value={(formatNumber(state?.internetMonth))} id="internetMonth" label="Internet per month" onChange={changeValue("internetMonth")} />
-                    <TextField value={(formatNumber(state?.waterYear))} id="waterYear" label="Water per year" onChange={changeValue("waterYear")} />
-                    <TextField value={(formatNumber(state?.mortgagePercent))} id="mortgagePercent" label="Mortgage %" onChange={changeValue("mortgagePercent", true)} />
-                    <TextField value={(formatNumber(state?.mortgageLtv))} id="mortgageLtv" label="Mortgage Ltv %" onChange={changeValue("mortgageLtv", true)} />
-                    <TextField value={(formatNumber(state?.boilerServiceYear))} id="boilerServiceYear" label="Boiler service" onChange={changeValue("boilerServiceYear")} />
-                    <TextField value={(formatNumber(state?.maintinanceYear))} id="maintinanceYear" label="Maintinance per year" onChange={changeValue("maintinanceYear")} />
+                    <NumberField value={state?.councilTaxYear} id="councilTaxYear" label="Council tax per year" onChange={changeValue("councilTaxYear")} />
+                    <NumberField value={state?.insuranceYear} id="insuranceYear" label="Inusance per year" onChange={changeValue("insuranceYear")} />
+                    <NumberField value={state?.internetMonth} id="internetMonth" label="Internet per month" onChange={changeValue("internetMonth")} />
+                    <NumberField value={state?.waterYear} id="waterYear" label="Water per year" onChange={changeValue("waterYear")} />
+                    <NumberField value={state?.mortgagePercent} id="mortgagePercent" label="Mortgage %" onChange={changeValue("mortgagePercent")} />
+                    <NumberField value={state?.mortgageLtv} id="mortgageLtv" label="Mortgage Ltv %" onChange={changeValue("mortgageLtv")} />
+                    <NumberField value={state?.boilerServiceYear} id="boilerServiceYear" label="Boiler service" onChange={changeValue("boilerServiceYear")} />
+                    <NumberField value={state?.maintinanceYear} id="maintinanceYear" label="Maintinance per year" onChange={changeValue("maintinanceYear")} />
                     <div>
                         <h4>Mortgage per month: {calculateMortgagePerMonth(state)}</h4>
                     </div>
@@ -109,10 +97,10 @@ const Calculator = ({
                     }}
                 >
                     <h3>Income</h3>
-                    <TextField value={(formatNumber(state?.emptyMonths))} id="emptyMonths" label="Empty Months" onChange={changeValue("emptyMonths")} />
+                    <NumberField value={state?.emptyMonths} id="emptyMonths" label="Empty Months" onChange={changeValue("emptyMonths")} />
                     {
                         state.rooms.map((room, index) => {
-                            return <TextField key={`room${index + 1}`} value={(formatNumber(room))} id={`room${index + 1}`} label={`Room ${index + 1}`} onChange={changeValueDeep(`rooms[${index}]`)} />
+                            return <NumberField key={`room${index + 1}`} value={room} id={`room${index + 1}`} label={`Room ${index + 1}`} onChange={changeRoom(index)} />
                         })
                     }
                     <div>
