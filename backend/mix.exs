@@ -45,7 +45,8 @@ defmodule Pic.MixProject do
       {:phoenix, "~> 1.8.16"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.13"},
-      {:ecto_sqlite3, ">= 0.0.0"},
+      # bdb (github.com/cbishopvelti/bdb) speaks the Postgres wire protocol, so Ecto uses Postgrex.
+      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 1.2.0"},
@@ -67,10 +68,11 @@ defmodule Pic.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      # bdb has no CREATE DATABASE or DROP DATABASE: a bdb server is one database, so there is no
+      # ecto.create / ecto.drop step. Reset by stopping the server and clearing its data dir.
       setup: ["deps.get", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "ecto.setup": ["ecto.migrate", "run priv/repo/seeds.exs"],
+      test: ["ecto.migrate --quiet", "test"],
       precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
     ]
   end

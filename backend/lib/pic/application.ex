@@ -35,7 +35,7 @@ defmodule Pic.Application do
   end
 
   defp skip_migrations?() do
-    # By default, sqlite migrations are run when using a release
+    # Migrations run at boot in a release; in dev and test, mix ecto.migrate does it.
     System.get_env("RELEASE_NAME") == nil
   end
 end

@@ -2,8 +2,9 @@ import Config
 
 # Configure your database
 config :pic, Pic.Repo,
-  # DATABASE_PATH lets docker compose keep the file in a volume.
-  database: System.get_env("DATABASE_PATH", Path.expand("../pic_dev.db", __DIR__)),
+  # A bdb server (see ../README.md): `mix bdb.server --listen 127.0.0.1:5433 --user postgres:postgres` in
+  # bdb's elixir/ dir. docker compose sets DATABASE_URL to its own bdb service.
+  url: System.get_env("DATABASE_URL", "ecto://postgres:postgres@localhost:5433/pic"),
   pool_size: 5,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true

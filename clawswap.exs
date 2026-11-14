@@ -10,10 +10,19 @@
     api: [command: "mix holo", cwd: "backend", port: 4000, match: ~r/mix holo|phx\.server/]
   ],
 
+  # bdb, the backend's database, from a checkout of github.com/cbishopvelti/bdb at ../bdb (or $BDB_DIR).
+  # A pane, so it keeps running across switches. Its data stays in ../bdb-data/pic.
+  panes: [
+    bdb: [
+      command:
+        "cd ${BDB_DIR:-../bdb}/elixir && mix bdb.server --data-dir \"$OLDPWD/../bdb-data/pic\" --listen 127.0.0.1:5433 --user postgres:postgres --ws-listen 127.0.0.1:8080"
+    ]
+  ],
+
   # Runs before `clawswap up` starts a new session.
   prepare: [
     [label: "npm install", run: "test -d node_modules || npm install", cwd: "frontend"],
-    [label: "mix setup", run: "test -d deps || mix setup", cwd: "backend"]
+    [label: "mix deps.get", run: "test -d deps || mix deps.get", cwd: "backend"]
   ],
 
   # What a switch runs when these files changed.

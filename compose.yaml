@@ -1,6 +1,34 @@
-# Runs pic locally: `docker compose up`, then the React app is on http://localhost:3000 and the
-# Phoenix + Hologram backend on http://localhost:4000 (API under /api).
+# Runs pic locally: `docker compose up`, then the React app is on http://localhost:3000, the
+# Phoenix + Hologram backend on http://localhost:4000 (API under /api), and bdb on localhost:5433
+# (Postgres wire, login postgres:postgres) with its WebSocket API on ws://localhost:8080/v1/ws.
+#
+# bdb runs from a checkout of github.com/cbishopvelti/bdb next to this repo (../bdb), or wherever
+# BDB_DIR points: `BDB_DIR=~/code/bdb docker compose up`.
 services:
+  bdb:
+    image: elixir:1.19
+    working_dir: /bdb/elixir
+    # The Elixir server from bdb's umbrella (no hex deps). --allow-remote-plaintext because the
+    # backend reaches it over the compose network, not loopback.
+    command: >
+      sh -c "mix bdb.server --data-dir /data --listen 0.0.0.0:5432 --allow-remote-plaintext
+      --user postgres:postgres --ws-listen 0.0.0.0:8080"
+    environment:
+      LANG: C.UTF-8
+    ports:
+      - "5433:5432"
+      - "8080:8080"
+    volumes:
+      - ${BDB_DIR:-../bdb}:/bdb
+      - bdb_build:/bdb/elixir/_build
+      - bdb_data:/data
+    healthcheck:
+      test: ["CMD", "bash", "-c", "</dev/tcp/127.0.0.1/5432"]
+      interval: 3s
+      timeout: 2s
+      retries: 60
+
+
   frontend:
     image: node:22
     working_dir: /app
@@ -20,10 +48,13 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
-    command: sh -c "mix deps.get && mix ecto.create && mix ecto.migrate && mix holo"
+    command: sh -c "mix deps.get && mix ecto.migrate && mix holo"
+    depends_on:
+      bdb:
+        condition: service_healthy
     environment:
       PHX_BIND_ALL: "1"
-      DATABASE_PATH: /data/pic_dev.db
+      DATABASE_URL: ecto://postgres:postgres@bdb:5432/pic
     ports:
       - "4000:4000"
     volumes:
@@ -31,10 +62,10 @@ services:
       # Kept out of the bind mount, so the container's builds don't mix with ones on the host.
       - backend_deps:/app/deps
       - backend_build:/app/_build
-      - backend_data:/data
 
 volumes:
   frontend_node_modules:
   backend_deps:
   backend_build:
-  backend_data:
+  bdb_build:
+  bdb_data:

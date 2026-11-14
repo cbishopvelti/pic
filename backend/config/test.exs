@@ -6,7 +6,8 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :pic, Pic.Repo,
-  database: Path.expand("../pic_test.db", __DIR__),
+  # A second bdb server, so tests never touch dev data: the same command as in dev.exs, on 5434.
+  url: System.get_env("TEST_DATABASE_URL", "ecto://postgres:postgres@localhost:5434/pic"),
   pool_size: 5,
   pool: Ecto.Adapters.SQL.Sandbox
 
