@@ -19,6 +19,12 @@
 .cs-off { color: var(--cs-failed); }
 .cs-bar.running .cs-status { color: var(--cs-running); }
 .cs-bar.failed .cs-status { color: var(--cs-failed); }
+.cs-bar button[aria-busy="true"] { opacity: 1; color: var(--cs-running); border-color: var(--cs-running); }
+.cs-spinner { display: inline-block; width: 0.8em; height: 0.8em; margin-right: 6px; vertical-align: -0.1em;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: cs-spin 0.8s linear infinite; }
+@keyframes cs-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .cs-spinner { animation-duration: 2s; } }
 .cs-bar button.cs-behind { border-color: var(--cs-behind); color: var(--cs-behind); }
 
 .cs-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
