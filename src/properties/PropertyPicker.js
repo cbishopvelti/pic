@@ -80,14 +80,8 @@ const PropertyPicker = ({ properties, selectedId, loading, hrefFor }) => (
     component="nav"
     aria-label="Properties"
     sx={{
-      // A swipeable row on phones, a wrapping grid on wider screens.
       display: 'grid',
-      gridAutoFlow: { xs: 'column', sm: 'row' },
-      gridAutoColumns: { xs: 'minmax(240px, 80%)', sm: 'unset' },
-      gridTemplateColumns: { xs: 'none', sm: 'repeat(auto-fill, minmax(220px, 1fr))' },
-      overflowX: { xs: 'auto', sm: 'visible' },
-      scrollSnapType: { xs: 'x mandatory', sm: 'none' },
-      '& > *': { scrollSnapAlign: 'start' },
+      gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
       gap: 1.5,
       p: 2,
       textAlign: 'left',
