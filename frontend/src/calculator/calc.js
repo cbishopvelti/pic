@@ -2,18 +2,26 @@ import { sum, clamp, round } from 'lodash';
 
 // The calculator's sums, shared by the calculator page and the property picker.
 
+// England's residential stamp duty bands from 1 April 2025: [from, to, rate] on the part of the price
+// in each band.
+const STAMP_DUTY_BANDS = [
+    [0, 125000, 0.00],
+    [125000, 250000, 0.02],
+    [250000, 925000, 0.05],
+    [925000, 1500000, 0.10],
+    [1500000, Infinity, 0.12],
+];
+// The surcharge on an additional property (buy-to-let), on the whole price, from 31 October 2024.
+const ADDITIONAL_PROPERTY_SURCHARGE = 0.05;
+
 export const caluclateStampDuty = (state) => {
     const priceOfProperty = state.priceOfProperty || 0;
 
-    const stampDutys = [
-        clamp(priceOfProperty - 125000, 0, 125000) * 0.00,
-        clamp(priceOfProperty - 250000, 0, 670000) * 0.05,
-        clamp(priceOfProperty - 925000, 0, 575000) * 0.10,
-        clamp(priceOfProperty - 1500000, 0, Number.MIN_SAFE_INTEGER) * 0.20,
-        priceOfProperty * 0.05
-    ]
+    const stampDutys = STAMP_DUTY_BANDS.map(([from, to, rate]) =>
+        clamp(priceOfProperty - from, 0, to - from) * rate
+    );
 
-    return sum(stampDutys);
+    return round(sum(stampDutys) + priceOfProperty * ADDITIONAL_PROPERTY_SURCHARGE, 2);
 }
 
 export const capitalNeeded = (state) => {
