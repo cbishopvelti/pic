@@ -11,7 +11,7 @@ defmodule Pic.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      compilers: [:phoenix_live_view] ++ Mix.compilers() ++ [:hologram],
+      compilers: Mix.compilers() ++ [:hologram],
       listeners: [Phoenix.CodeReloader]
     ]
   end
@@ -44,17 +44,15 @@ defmodule Pic.MixProject do
     [
       {:phoenix, "~> 1.8.16"},
       {:phoenix_ecto, "~> 4.5"},
+      # Phoenix encodes HTML error pages (PicWeb.ErrorHTML) with it.
+      {:phoenix_html, "~> 4.1"},
       {:ecto_sql, "~> 3.13"},
       # bdb (github.com/cbishopvelti/bdb) speaks the Postgres wire protocol, so Ecto uses Postgrex.
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 1.2.0"},
-      {:lazy_html, ">= 0.1.0", only: :test},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
       {:hologram, "~> 0.12"}
     ]

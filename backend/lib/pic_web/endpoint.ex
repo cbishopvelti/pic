@@ -11,10 +11,6 @@ defmodule PicWeb.Endpoint do
     same_site: "Lax"
   ]
 
-  # socket "/live", Phoenix.LiveView.Socket,
-  #   websocket: [connect_info: [session: @session_options]],
-  #   longpoll: [connect_info: [session: @session_options]]
-
   # Serve at "/" the static files from "priv/static" directory.
   #
   # When code reloading is disabled (e.g., in production),
@@ -47,6 +43,7 @@ defmodule PicWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+
   # Hologram's pages (app/pages) first; whatever they don't match, such as /api, falls through to the router.
   plug Hologram.Router
   plug PicWeb.Router

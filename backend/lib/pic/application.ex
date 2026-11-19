@@ -10,9 +10,7 @@ defmodule Pic.Application do
     children = [
       PicWeb.Telemetry,
       Pic.Repo,
-      {Ecto.Migrator,
-       repos: Application.fetch_env!(:pic, :ecto_repos), skip: skip_migrations?()},
-      {DNSCluster, query: Application.get_env(:pic, :dns_cluster_query) || :ignore},
+      {Ecto.Migrator, repos: Application.fetch_env!(:pic, :ecto_repos), skip: skip_migrations?()},
       {Phoenix.PubSub, name: Pic.PubSub},
       # Start a worker by calling: Pic.Worker.start_link(arg)
       # {Pic.Worker, arg},
