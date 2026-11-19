@@ -14,9 +14,7 @@ import {
     calculateProfitPercent,
 } from './calc';
 
-const Calculator = ({
-
-}) => {
+const Calculator = () => {
     const { propertyId } = useParams()
 
     const [state, setState]  = useState({
@@ -116,7 +114,7 @@ const Calculator = ({
                 <h4>Profit per month: {formatNumber((calculateIncomePerYear(state) - calculateExpensePerYear(state)) / 12)}</h4>
                 <h4>Profit per year: {formatNumber(calculateIncomePerYear(state) - calculateExpensePerYear(state))}</h4>
                 <h4>Profit %: {calculateProfitPercent(state)}</h4>
-                <a href={state.link} target="_blank">{state.link}</a>
+                <a href={state.link} target="_blank" rel="noreferrer">{state.link}</a>
             </Grid>
         </Grid>
     </div>)

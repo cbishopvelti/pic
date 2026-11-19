@@ -1,5 +1,6 @@
-# Builds the app and publishes it to GitHub Pages (https://cbishopvelti.github.io/pic/) on every push to
-# master, so `npm run buildDeploy` and committing docs/ are no longer needed.
+# Tests and builds the React app, and publishes it to GitHub Pages (https://cbishopvelti.github.io/pic/)
+# on every push to master. Pull requests get the same tests and build, without the deploy.
+# Actions sets CI=true, so a lint warning fails the build.
 # Needs Settings > Pages > Build and deployment > Source set to "GitHub Actions".
 name: Deploy to GitHub Pages
 
@@ -7,6 +8,8 @@ on:
   push:
     branches: [master]
     # Only the React app is published; backend changes don't need a redeploy.
+    paths: [frontend/**, .github/workflows/pages.yml]
+  pull_request:
     paths: [frontend/**, .github/workflows/pages.yml]
   workflow_dispatch:
 
@@ -16,8 +19,9 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  # Deploys queue one after another; a pull request's checks only replace that PR's earlier run.
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'pages' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -36,16 +40,17 @@ jobs:
 
       - run: npm ci
 
-      # CI=true (set by Actions) makes react-scripts fail the build on lint warnings; the app has a few.
-      - run: npm run build
-        env:
-          CI: false
+      - run: npm test
 
-      - uses: actions/upload-pages-artifact@v3
+      - run: npm run build
+
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: frontend/build
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-24.04
     environment:
