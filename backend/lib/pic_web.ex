@@ -6,7 +6,6 @@ defmodule PicWeb do
   This can be used in your application as:
 
       use PicWeb, :controller
-      use PicWeb, :html
 
   The definitions below will be executed for every controller,
   component, etc, so keep them short and clean, focused
@@ -17,7 +16,7 @@ defmodule PicWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images hologram favicon.ico robots.txt)
+  def static_paths, do: ~w(hologram favicon.ico robots.txt)
 
   def router do
     quote do
@@ -26,7 +25,6 @@ defmodule PicWeb do
       # Import common connection and controller functions to use in pipelines
       import Plug.Conn
       import Phoenix.Controller
-      import Phoenix.LiveView.Router
     end
   end
 
@@ -46,51 +44,6 @@ defmodule PicWeb do
     end
   end
 
-  def live_view do
-    quote do
-      use Phoenix.LiveView
-
-      unquote(html_helpers())
-    end
-  end
-
-  def live_component do
-    quote do
-      use Phoenix.LiveComponent
-
-      unquote(html_helpers())
-    end
-  end
-
-  def html do
-    quote do
-      use Phoenix.Component
-
-      # Import convenience functions from controllers
-      import Phoenix.Controller,
-        only: [get_csrf_token: 0, view_module: 1, view_template: 1]
-
-      # Include general helpers for rendering HTML
-      unquote(html_helpers())
-    end
-  end
-
-  defp html_helpers do
-    quote do
-      # HTML escaping functionality
-      import Phoenix.HTML
-      # Core UI components
-      import PicWeb.CoreComponents
-
-      # Common modules used in templates
-      alias Phoenix.LiveView.JS
-      alias PicWeb.Layouts
-
-      # Routes generation with the ~p sigil
-      unquote(verified_routes())
-    end
-  end
-
   def verified_routes do
     quote do
       use Phoenix.VerifiedRoutes,
@@ -101,7 +54,7 @@ defmodule PicWeb do
   end
 
   @doc """
-  When used, dispatch to the appropriate controller/live_view/etc.
+  When used, dispatch to the appropriate router/controller/etc.
   """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])

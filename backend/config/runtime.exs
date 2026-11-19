@@ -30,9 +30,9 @@ if config_env() == :dev do
       patterns: [
         # Static assets, except user uploads
         ~r"priv/static/(?!uploads/).*\.(js|css|png|jpeg|jpg|gif|svg)$"E,
-        # Router, Controllers, LiveViews and LiveComponents
+        # Router and controllers
         ~r"lib/pic_web/router\.ex$"E,
-        ~r"lib/pic_web/(controllers|live|components)/.*\.(ex|heex)$"E
+        ~r"lib/pic_web/controllers/.*\.ex$"E
       ]
     ]
 end
@@ -62,8 +62,6 @@ if config_env() == :prod do
       """
 
   host = System.get_env("PHX_HOST") || "example.com"
-
-  config :pic, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :pic, PicWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],

@@ -1,18 +1,19 @@
-# Pic
+# pic backend
 
-To start your Phoenix server:
+A Phoenix 1.8 app with [Hologram](https://hologram.page) for pages, on [bdb](https://github.com/cbishopvelti/bdb)
+through Ecto's Postgres adapter.
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+- `app/`: Hologram pages and layouts. `/` is a placeholder page.
+- `lib/pic_web/router.ex`: the JSON API under `/api`, for the React frontend. So far there is only
+  `GET /api/health`, which also checks the database.
+- There is no LiveView, and no asset pipeline: Hologram bundles its own page JavaScript.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+```sh
+mix setup       # deps.get, then migrate and seed
+mix holo        # the server on http://localhost:4000, with Hologram's compiler and runtime
+mix test        # needs a bdb server on 5434 (TEST_DATABASE_URL overrides it)
+mix precommit   # warnings as errors, unused deps, format, tests
+```
 
-Ready to run in production? Please [check our deployment guides](https://phoenix.hexdocs.pm/deployment.html).
-
-## Learn more
-
-* Official website: https://www.phoenixframework.org/
-* Guides: https://phoenix.hexdocs.pm/overview.html
-* Docs: https://phoenix.hexdocs.pm
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+Dev expects bdb on 5433 (`DATABASE_URL` overrides it). See the [README at the repo root](../README.md)
+for starting bdb, and for running everything with `docker compose up`.

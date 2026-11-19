@@ -19,8 +19,7 @@ config :pic, PicWeb.Endpoint,
     formats: [html: PicWeb.ErrorHTML, json: PicWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Pic.PubSub,
-  live_view: [signing_salt: "l9QoQroz"]
+  pubsub_server: Pic.PubSub
 
 # Configure Elixir's Logger
 config :logger, :default_formatter,
