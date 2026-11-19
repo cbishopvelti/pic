@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+# pic
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- `frontend/`: the React app (Create React App), published to https://cbishopvelti.github.io/pic/ by
+  `.github/workflows/pages.yml` on every push to master that touches it. See `frontend/README.md`.
+- `backend/`: a Phoenix + [Hologram](https://hologram.page) app. The JSON API for the frontend goes
+  under `/api` (just `/api/health` so far); Hologram pages live in `backend/app/`.
 
-## Available Scripts
+The database is [bdb](https://github.com/cbishopvelti/bdb). It speaks the Postgres wire protocol, so the
+backend uses Ecto's Postgres adapter (Postgrex) against it. A bdb server is a single database, so there
+is no `mix ecto.create` / `ecto.drop`; migrations work as usual.
 
-In the project directory, you can run:
+## Running locally
 
-### `npm start`
+Clone bdb next to this repo (`../bdb`), or set `BDB_DIR` to where it is.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+With Docker: `docker compose up`. The frontend is on http://localhost:3000, the backend on
+http://localhost:4000, and bdb on localhost:5433 (login `postgres:postgres`; WebSocket API on
+ws://localhost:8080/v1/ws). bdb's data is kept in the `bdb_data` volume.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Without Docker (Elixir 1.19 / OTP 28, Node 20+, and inotify-tools on Linux):
 
-### `npm test`
+```sh
+# bdb, in its elixir/ dir: dev on 5433, and a second server on 5434 for mix test
+mix bdb.server --data-dir ../../bdb-data/pic --listen 127.0.0.1:5433 --user postgres:postgres
+mix bdb.server --data-dir ../../bdb-data/pic-test --listen 127.0.0.1:5434 --user postgres:postgres
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+cd frontend && npm install && npm start
+cd backend && mix setup && mix holo
+```
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`mix holo` is `mix phx.server` with Hologram's compiler and runtime turned on. Under clawswap,
+`clawswap.exs` starts bdb, the frontend and the backend.

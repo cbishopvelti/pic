@@ -1,0 +1,13 @@
+# Development image for docker compose: the source is mounted in, so this only holds the toolchain.
+# Hologram needs Elixir 1.19 / OTP 28, Node (it bundles the page JavaScript with esbuild from npm) and
+# inotify-tools (its dev server watches files with inotifywait).
+FROM elixir:1.19
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends inotify-tools nodejs npm build-essential \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN mix local.hex --force && mix local.rebar --force
+
+ENV LANG=C.UTF-8
+WORKDIR /app
